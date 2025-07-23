@@ -1,0 +1,31 @@
+1. Cropping (crop.py)
+Function: Automatically detects and removes irrelevant regions (UI overlays, text, borders) from ultrasound images, retaining only the diagnostic region of interest (ROI).
+Outcome: Produces images focused on clinical content, eliminating noise and artifacts from machine interfaces.
+
+2. Intensity Normalization (intensity_normalization.py)
+Function: Applies percentile-based clipping (e.g., 0.5th to 99.5th percentiles) to exclude outliers and then linearly rescales pixel values (typically to 0–255).
+Outcome: Ensures consistent brightness and contrast across all ultrasound images, compensating for variability in equipment or acquisition parameters.
+
+3. Padding or Center Cropping (padding.py)
+Function: Pads images that are smaller than the target size (1024×1024) symmetrically with black pixels, or center-crops images larger than 1024×1024, to achieve a perfectly square shape required by the encoder.
+Outcome: Every image, regardless of its original size, is transformed into a 1024×1024 square without distorting anatomical features.
+
+4. Data Loading (data_loader.py)
+Function: Provides efficient loading, batching, and optional augmentation for downstream model training or inference; ensures all images are converted to PyTorch tensors (with proper shape and type).
+Outcome: Model-ready batches of images are seamlessly supplied to the UltraSAM encoder.
+
+
+
+Supported Ultrasound Data Types
+Image Modalities: Gray-scale or RGB ultrasound frames, extracted from static images or video sequences.
+Image Dimensions: Any original size—rectangular, square, smaller, or larger than 1024×1024 pixels.
+Content Variations: Images with diverse artifacts, overlays, backgrounds, or scan conditions.
+File Formats: PNG, JPEG/JPG, and (with minimal adaptation) DICOM/medical imaging files.
+
+
+
+Output Data: Model-Readiness for UltraSAM Encoder
+After completing all preprocessing steps:
+All images are 1024×1024 squares, with consistent orientation and intensity.
+Images are RGB and of type float32 or uint8 (as required for PyTorch/SAM input).
+Batching is automated, with shape [batch_size, 3, 1024, 1024] (for RGB), fully compatible with UltraSAM and other vision transformer models.
